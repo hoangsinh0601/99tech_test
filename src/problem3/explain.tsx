@@ -1,4 +1,4 @@
-// Refactor code and explanation:
+// Error code and explanation:
 
 // Should using type instead of interface because:
 // Cannot declare multiple type with the same name, by not allowing multiple type declarations with the same name, typeScript helps prevent naming conflicts, this ensures that each type alias has a unique and unambiguous definition,  ensures that a type is consistently defined throughout codebase, making the code easier to understand and maintain.

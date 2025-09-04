@@ -1,4 +1,5 @@
 // The Refactor code is below:
+
   type WalletBalance {
     currency: string;
     amount: number;
@@ -37,10 +38,28 @@
     const sortedBalances = useMemo(() => {
       return balances
         .filter((balance: WalletBalance) => getPriority(balance.blockchain) > -99 && balance.amount > 0)
-        .sort((lhs: WalletBalance, rhs: WalletBalance) => getPriority(rhs.blockchain) - getPriority(lhs.blockchain));
-    }, [balances]);
+        .sort((lhs: WalletBalance, rhs: WalletBalance) => {
+          const leftPriority = getPriority(lhs.blockchain);
+          const rightPriority = getPriority(rhs.blockchain);
+          
+          // Complete sort logic
+          if (leftPriority > rightPriority) {
+            return -1;
+          } else if (rightPriority > leftPriority) {
+            return 1;
+          }
+          return 0; // Equal priorities
+        })
+        .map((balance: WalletBalance): FormattedWalletBalance => ({
+          ...balance,
+          formatted: balance.amount.toFixed()
+        }));
+        
+    }, [balances, prices]); // Update dependencies
   
-    const rows = sortedBalances.map((balance: WalletBalance) => {
+  // Memoize rows generation
+  const rows = useMemo(() => {
+    return sortedBalances.map((balance: FormattedWalletBalance) => {
       const usdValue = prices[balance.currency] * balance.amount;
       return (
         <WalletRow 
@@ -48,10 +67,11 @@
           key={balance.currency + balance.amount} // Assuming currency is unique for each balance
           amount={balance.amount}
           usdValue={usdValue}
-          formattedAmount={balance.amount.toFixed()}
+          formattedAmount={balance.formatted}
         />
       );
     });
+  }, [sortedBalances, prices]); 
   
     return (
       <div {...rest}>
