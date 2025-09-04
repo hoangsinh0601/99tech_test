@@ -35,7 +35,7 @@
       }
     };
   
-    const sortedBalances = useMemo(() => {
+    const formattedBalance = useMemo(() => {
       return balances
         .filter((balance: WalletBalance) => getPriority(balance.blockchain) > -99 && balance.amount > 0)
         .sort((lhs: WalletBalance, rhs: WalletBalance) => {
@@ -50,6 +50,7 @@
           }
           return 0; // Equal priorities
         })
+        // Get formatted value
         .map((balance: WalletBalance): FormattedWalletBalance => ({
           ...balance,
           formatted: balance.amount.toFixed()
@@ -59,7 +60,7 @@
   
   // Memoize rows generation
   const rows = useMemo(() => {
-    return sortedBalances.map((balance: FormattedWalletBalance) => {
+    return formattedBalance.map((balance: FormattedWalletBalance) => {
       const usdValue = prices[balance.currency] * balance.amount;
       return (
         <WalletRow 
@@ -71,7 +72,7 @@
         />
       );
     });
-  }, [sortedBalances, prices]); 
+  }, [formattedBalance, prices]); 
   
     return (
       <div {...rest}>
