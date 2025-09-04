@@ -12,6 +12,7 @@
   type Props = BoxProps & {};
   
   const WalletPage: React.FC<Props> = (props: Props) => {
+    // Use children if needed
     const { children, ...rest } = props;
     const balances = useWalletBalances();
     const prices = usePrices();
@@ -55,6 +56,7 @@
     return (
       <div {...rest}>
         {rows}
+        {children} {/* Use children if needed */}
       </div>
     );
   };

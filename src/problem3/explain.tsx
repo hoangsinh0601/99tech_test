@@ -2,6 +2,7 @@
 
 // Should using type instead of interface because:
 // Cannot declare multiple type with the same name, by not allowing multiple type declarations with the same name, typeScript helps prevent naming conflicts, this ensures that each type alias has a unique and unambiguous definition,  ensures that a type is consistently defined throughout codebase, making the code easier to understand and maintain.
+// Missing blockchain property
 interface WalletBalance {
   currency: string;
   amount: number;
@@ -14,6 +15,7 @@ interface FormattedWalletBalance {
 
 interface Props extends BoxProps {}
 const WalletPage: React.FC<Props> = (props: Props) => {
+  // Children props is declare but not used
   const { children, ...rest } = props;
   const balances = useWalletBalances();
   const prices = usePrices();
